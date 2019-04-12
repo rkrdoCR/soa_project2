@@ -11,15 +11,13 @@ shared_memory *sm_ptr;
 
 int main(int argc, char **argv)
 {
-    printf("hello finalizer\n");
+    printf("finalizer program\n");
 
     //get the id from argv
     int shmid = atoi(&(*argv[1])); 
   
     // shmat to attach to shared memory 
     sm_ptr = (shared_memory*) shmat(shmid, 0,0);
-
-    //free(sm_ptr->buffer);
 
     // destroy the shared memory 
     shmctl(shmid,IPC_RMID,NULL); 

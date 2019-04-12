@@ -8,6 +8,9 @@ shared_memory *sm_ptr;
 
 int main(int argc, char **argv)
 { 
+    //get the buffersize from argv
+    int buffer_size = atoi(&(*argv[2]));
+
     // ftok to generate unique key 
     key_t key = ftok("shmfile",65); 
   
@@ -27,7 +30,7 @@ int main(int argc, char **argv)
     sm_ptr->consumers_count = 0;
     sm_ptr->producers_count = 0;
     
-    CB_init(&sm_ptr->buffer, 5);
+    CB_init(sm_ptr->buffer, buffer_size);
 
     printf("shared memory created! your id is %d\n", shmid);
 

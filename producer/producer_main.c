@@ -5,6 +5,7 @@
 #include <string.h> 
 #include <unistd.h>
 
+#include "utilities/time_util.h"
 #include "data_structures/shared_memory.h"
 
 shared_memory *sm_ptr;
@@ -21,8 +22,8 @@ int main(int argc, char **argv)
     (*sm_ptr->buffer).messages = (message*)shmat(sm_ptr->m_shmid, NULL, 0);
   
     sm_ptr->producers_count++;
-
     int pid = getpid();
+    char *date_time = get_current_date();
 
     printf("%d\n", sm_ptr->producers_count);
     printf("PID = %d\n", pid);

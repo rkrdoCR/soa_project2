@@ -11,6 +11,7 @@
         "${workspaceFolder}/${fileBasenameNoExtension}",
         "${workspaceFolder}/data_structures/shared_memory.c",
         "${workspaceFolder}/data_structures/circular_buffer.c",
+        "${workspaceFolder}/utilities/time_util.c",
         "${file}",
         "`pkg-config", "--cflags", "--libs", "gtk+-3.0`",
         //"`pkg-config", "--cflags gtk+-3.0`", "`pkg-config", "--libs", "gtk+-3.0`",
