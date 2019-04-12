@@ -16,9 +16,11 @@ int main(int argc, char **argv)
   
     // shmat to attach to shared memory 
     sm_ptr = (shared_memory*) shmat(shmid, 0,0);
+    sm_ptr->buffer = (circular_buffer*)shmat(sm_ptr->cb_shmid, NULL, 0);
+    (*sm_ptr->buffer).messages = (message*)shmat(sm_ptr->m_shmid, NULL, 0);
   
     sm_ptr->consumers_count++;
-    message m = CB_pop(&sm_ptr->buffer);
+    message m = CB_pop(sm_ptr->buffer);
   
     printf("Consumers count: %d\n",sm_ptr->consumers_count); 
     printf("PID got from buffer = %d\n", m.pid);

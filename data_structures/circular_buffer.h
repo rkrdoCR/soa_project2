@@ -13,7 +13,8 @@ typedef struct
     int size;
     int start;
     int count;
-    message messages[5];
+
+    message *messages;
 } circular_buffer;
 
 void CB_init(circular_buffer *cb, int size);

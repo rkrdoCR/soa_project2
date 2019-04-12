@@ -12,6 +12,10 @@ typedef struct
 {
     int producers_count;
     int consumers_count;
+
+    int cb_shmid;
+    int m_shmid;
+    
     circular_buffer *buffer;
 } shared_memory;
 
