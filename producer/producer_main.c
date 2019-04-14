@@ -1,5 +1,6 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/sem.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,22 +18,29 @@ int main(int argc, char **argv)
     //get the id from argv
     int shmid = atoi(&(*argv[1]));
 
-    // shmat to attach to shared memory
-    sm_ptr = (shared_memory *)shmat(shmid, 0, 0);
-    sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
-    (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
+    //production time (we ask the user for seconds but need useconds)
+    long pt = atoi(&(*argv[3]));
+    pt = pt * 1000000;
 
-    sm_ptr->producers_count++;
-    int pid = getpid();
+    struct sembuf sb = {0, -1, 0};
+
+    // shmat to attach to shared memory
+    sm_ptr = (shared_memory *)shmat(shmid, 0, 0);    
 
     while (1)
     {
-        usleep(10000000);
-        char *date_time = get_current_date();
-        printf("%d\n", sm_ptr->producers_count);
-        printf("PID = %d\n", pid);
+        usleep(pt);
+        semop(sm_ptr->semid, &sb, 1);
+        char *date_time = get_current_date();sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
+        (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
+
+        sm_ptr->producers_count++;
+        int pid = getpid();
 
         CB_push(sm_ptr->buffer, pid, 1);
+
+        sb.sem_op = 1;
+        semop(sm_ptr->semid, &sb, 1);
     }
 
     //detach from shared memory

@@ -5,6 +5,7 @@
 #include <sys/ipc.h>
 
 #include "circular_buffer.h"
+#include "semaphore_union.h"
 
 #define MESSAGE_MAX_SIZE (size_t)4096
 
@@ -15,6 +16,11 @@ typedef struct
 
     int cb_shmid;
     int m_shmid;
+    int semid;
+
+    union semun sem1_arg;
+    // union semun sem2_arg;
+    // union semun sem3_arg;
     
     circular_buffer *buffer;
 } shared_memory;
