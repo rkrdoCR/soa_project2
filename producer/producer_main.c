@@ -25,17 +25,18 @@ int main(int argc, char **argv)
     struct sembuf sb = {0, -1, 0};
 
     // shmat to attach to shared memory
-    sm_ptr = (shared_memory *)shmat(shmid, 0, 0);    
+    sm_ptr = (shared_memory *)shmat(shmid, 0, 0);
+
+    sm_ptr->producers_count++;
+    int pid = getpid();
 
     while (1)
     {
         usleep(pt);
         semop(sm_ptr->semid, &sb, 1);
-        char *date_time = get_current_date();sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
-        (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
-        sm_ptr->producers_count++;
-        int pid = getpid();
+        sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
+        (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
         CB_push(sm_ptr->buffer, pid, 1);
 

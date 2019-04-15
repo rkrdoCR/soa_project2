@@ -1,3 +1,6 @@
+#include <string.h>
+
+#include "utilities/time_util.h"
 #include "circular_buffer.h"
 #include "message.h"
 
@@ -26,6 +29,10 @@ void CB_push(circular_buffer *cb, int pid, int k)
         }
         cb->messages[index].key = k;
         cb->messages[index].pid = pid;
+        strcpy(cb->messages[index].date, get_current_date());
+
+        printf("Process PID: %d, has pushed a message to index: %d at %s",
+        pid, index, cb->messages[index].date);
     }
 }
 
