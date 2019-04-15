@@ -2,4 +2,4 @@
 all: test
 
 test:
-	gcc -o test test_exp_dist.c exp_dist.c  get_key.c -I. -lm
+	gcc -o test test_exp_dist.c exp_dist.c check_mod.c get_key.c -I. -lm
