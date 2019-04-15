@@ -31,12 +31,12 @@ void CB_push(circular_buffer *cb, int pid, int k)
         cb->messages[index].pid = pid;
         strcpy(cb->messages[index].date, get_current_date());
 
-        printf("Process PID: %d, has pushed a message to index: %d at %s",
+        printf("Producer PID: %d, has pushed a message to index: %d at %s\n",
         pid, index, cb->messages[index].date);
     }
 }
 
-message CB_pop(circular_buffer *cb)
+message CB_pop(circular_buffer *cb, int pid)
 {
     message element;
     if (CB_empty(cb))
@@ -53,6 +53,9 @@ message CB_pop(circular_buffer *cb)
         {
             cb->start = 0;
         }
+
+        printf("Consumer PID: %d, has pulled a message from index: %d at %s\n",
+        pid, cb->start, cb->messages[cb->start].date);
 
         return element;
     }

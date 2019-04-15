@@ -19,8 +19,8 @@ typedef struct
     int semid;
 
     union semun sem1_arg;
-    // union semun sem2_arg;
-    // union semun sem3_arg;
+    union semun sem2_arg;
+    union semun sem3_arg;
     
     circular_buffer *buffer;
 } shared_memory;

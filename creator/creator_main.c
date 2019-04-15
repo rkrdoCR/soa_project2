@@ -46,12 +46,16 @@ int main(int argc, char **argv)
     semctl(sm_ptr->semid, 0, SETVAL, sm_ptr->sem1_arg);
 
     // semaphore 1 initialization
-    // sm_ptr->sem2_arg.val = 0;
-    // semctl(sm_ptr->semid, 1, SETVAL, sm_ptr->sem2_arg);
+    sm_ptr->sem2_arg.array = (unsigned short*)shmat(shmget(1015, sizeof(unsigned short), IPC_CREAT|0666),0,0);
+    sm_ptr->sem2_arg.buf = (struct semid_ds*)shmat(shmget(1016, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
+    sm_ptr->sem2_arg.val = 0;
+    semctl(sm_ptr->semid, 1, SETVAL, sm_ptr->sem2_arg);
 
     // semaphore 2 initialization
-    // sm_ptr->sem3_arg.val = buffer_size;
-    // semctl(sm_ptr->semid, 2, SETVAL, sm_ptr->sem3_arg);    
+    sm_ptr->sem3_arg.array = (unsigned short*)shmat(shmget(1017, sizeof(unsigned short), IPC_CREAT|0666),0,0);
+    sm_ptr->sem3_arg.buf = (struct semid_ds*)shmat(shmget(1018, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
+    sm_ptr->sem3_arg.val = buffer_size;
+    semctl(sm_ptr->semid, 2, SETVAL, sm_ptr->sem3_arg);    
     
     // circular buffer initialization
     CB_init(sm_ptr->buffer, buffer_size);

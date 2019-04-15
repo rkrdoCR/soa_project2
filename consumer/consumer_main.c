@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "data_structures/shared_memory.h"
 
@@ -13,17 +14,41 @@ int main(int argc, char **argv)
 { 
     //get the id from argv
     int shmid = atoi(&(*argv[1])); 
+
+    // consumption time (we ask the user for seconds but need useconds)
+    // check in the project spec what is needed here!!!
+    // long pt = atoi(&(*argv[3]));
+    // pt = pt * 1000000;
+
+    // semaphores configuration
+    struct sembuf sb  = {0, -1, 0};
+    struct sembuf sb1 = {1, -1, 0};
+    struct sembuf sb2 = {2, 1, 0};
   
     // shmat to attach to shared memory 
     sm_ptr = (shared_memory*) shmat(shmid, 0,0);
-    sm_ptr->buffer = (circular_buffer*)shmat(sm_ptr->cb_shmid, NULL, 0);
-    (*sm_ptr->buffer).messages = (message*)shmat(sm_ptr->m_shmid, NULL, 0);
-  
+
     sm_ptr->consumers_count++;
-    message m = CB_pop(sm_ptr->buffer);
+    int pid = getpid();
+    
+    while(1) // this condition must be changed so it loops until the consumer is said to no longer consume
+    {
+        usleep(2000000); // the value should be taken from the console arguments (check project spec for details)
+        semop(sm_ptr->semid, &sb1, 1); // prevents underflow
+        semop(sm_ptr->semid, &sb, 1);  // controls buffer access
+
+        // attach buffer and messages structures to the shared memory
+        sm_ptr->buffer = (circular_buffer*)shmat(sm_ptr->cb_shmid, NULL, 0);
+        (*sm_ptr->buffer).messages = (message*)shmat(sm_ptr->m_shmid, NULL, 0);
   
-    printf("Consumers count: %d\n",sm_ptr->consumers_count); 
-    printf("PID got from buffer = %d\n", m.pid);
+        // takes the first item from the buffer
+        message m = CB_pop(sm_ptr->buffer, pid);
+
+        sb.sem_op = 1;
+        semop(sm_ptr->semid, &sb, 1);
+        semop(sm_ptr->semid, &sb2, 1); // prevents overflow
+        
+    }
       
     //detach from shared memory  
     shmdt(sm_ptr);

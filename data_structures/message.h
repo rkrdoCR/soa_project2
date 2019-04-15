@@ -5,7 +5,7 @@ typedef struct
 {
     int pid;
     int key;
-    char date[40];
+    char date[30];
 } message;
 
 #endif
