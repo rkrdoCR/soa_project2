@@ -9,7 +9,11 @@ shared_memory *sm_ptr;
 int main(int argc, char **argv)
 { 
     //get the buffersize from argv
-    int buffer_size = atoi(&(*argv[2]));
+    int buffer_size = atoi(&(*argv[2]));//TODO change this to index 0
+
+    if(buffer_size < 1){
+        printf("Buffer size must be a positive number!\n");
+    }
 
     // ftok to generate unique key 
     key_t key = ftok("creator_main.c",65); 
