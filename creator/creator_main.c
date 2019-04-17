@@ -25,7 +25,17 @@ int main(int argc, char **argv)
     }
 
     // ftok to generate unique key 
-    key_t key = ftok("creator_main.c",65); 
+    key_t key = ftok(".",65); 
+
+    key_t key1 = ftok(".",'B');
+    key_t key2 = ftok(".",'C');
+    key_t key3 = ftok(".",'D');
+    key_t key4 = ftok(".",'E');
+    key_t key5 = ftok(".",'F');
+    key_t key6 = ftok(".",'G');
+    key_t key7 = ftok(".",'H');
+    key_t key8 = ftok(".",'I');
+    key_t key9 = ftok(".",'J');
   
     // shmget returns an identifier in shmid 
     int shmid = shmget(key,1024,0666|IPC_CREAT); 
@@ -35,9 +45,9 @@ int main(int argc, char **argv)
 
     // store the ids of the circular buffer and the message array, they will be used
     // on the producer and consumer to attach them to the their respective space in the shared memory
-    sm_ptr->cb_shmid = shmget(1010, sizeof(circular_buffer), IPC_CREAT|0666);
-    sm_ptr->m_shmid = shmget(1011, sizeof(message), IPC_CREAT|0666);
-    sm_ptr->semid = semget(1012, 3, 0666 | IPC_CREAT);
+    sm_ptr->cb_shmid = shmget(key1, sizeof(circular_buffer), IPC_CREAT|0666);
+    sm_ptr->m_shmid = shmget(key2, sizeof(message), IPC_CREAT|0666);
+    sm_ptr->semid = semget(key3, 3, 0666 | IPC_CREAT);
     
     // attach this process to the shared memory. This will also initialize their memory spaces 
     sm_ptr->buffer = (circular_buffer*)shmat(sm_ptr->cb_shmid, NULL, 0);
@@ -53,20 +63,20 @@ int main(int argc, char **argv)
     //      3. semaphore 2: prevents overflow
 
     // semaphore 0 initialization
-    sm_ptr->sem1_arg.array = (unsigned short*)shmat(shmget(1013, sizeof(unsigned short), IPC_CREAT|0666),0,0);
-    sm_ptr->sem1_arg.buf = (struct semid_ds*)shmat(shmget(1014, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
+    sm_ptr->sem1_arg.array = (unsigned short*)shmat(shmget(key4, sizeof(unsigned short), IPC_CREAT|0666),0,0);
+    sm_ptr->sem1_arg.buf = (struct semid_ds*)shmat(shmget(key5, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
     sm_ptr->sem1_arg.val = 1;
     semctl(sm_ptr->semid, 0, SETVAL, sm_ptr->sem1_arg);
 
     // semaphore 1 initialization
-    sm_ptr->sem2_arg.array = (unsigned short*)shmat(shmget(1015, sizeof(unsigned short), IPC_CREAT|0666),0,0);
-    sm_ptr->sem2_arg.buf = (struct semid_ds*)shmat(shmget(1016, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
+    sm_ptr->sem2_arg.array = (unsigned short*)shmat(shmget(key6, sizeof(unsigned short), IPC_CREAT|0666),0,0);
+    sm_ptr->sem2_arg.buf = (struct semid_ds*)shmat(shmget(key7, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
     sm_ptr->sem2_arg.val = 0;
     semctl(sm_ptr->semid, 1, SETVAL, sm_ptr->sem2_arg);
 
     // semaphore 2 initialization
-    sm_ptr->sem3_arg.array = (unsigned short*)shmat(shmget(1017, sizeof(unsigned short), IPC_CREAT|0666),0,0);
-    sm_ptr->sem3_arg.buf = (struct semid_ds*)shmat(shmget(1018, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
+    sm_ptr->sem3_arg.array = (unsigned short*)shmat(shmget(key8, sizeof(unsigned short), IPC_CREAT|0666),0,0);
+    sm_ptr->sem3_arg.buf = (struct semid_ds*)shmat(shmget(key9, sizeof(struct semid_ds), IPC_CREAT|0666),0,0);
     sm_ptr->sem3_arg.val = buffer_size;
     semctl(sm_ptr->semid, 2, SETVAL, sm_ptr->sem3_arg);    
     
