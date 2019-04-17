@@ -8,11 +8,20 @@ shared_memory *sm_ptr;
 
 int main(int argc, char **argv)
 { 
+    char usage_msj[] = "Usage: ./creator_main bufferSize(int)\n %s";
+    /*
+    ***********Add this when we stop using launch.json for debug***********
+    if(argc != 1){
+        fprintf(stderr, usage_msj, "Parameter count!\n");
+        return EXIT_FAILURE;
+    }*/
+
     //get the buffersize from argv
     int buffer_size = atoi(&(*argv[2]));//TODO change this to index 0
 
     if(buffer_size < 1){
-        printf("Buffer size must be a positive number!\n");
+        fprintf(stderr, usage_msj, "Buffer size must be a positive number greater than zero!\n");
+        return EXIT_FAILURE;
     }
 
     // ftok to generate unique key 

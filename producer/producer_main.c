@@ -15,14 +15,27 @@ message *msg;
 
 int main(int argc, char **argv)
 {
+    char usage_msj[] = "Usage: ./producer_main sharedMemoryId(int) productionTime(int)\n %s";
+    /*
+    ***********Add this when we stop using launch.json for debug***********
+    if(argc != 2){
+        fprintf(stderr, usage_msj, "Parameter count!\n");
+        return EXIT_FAILURE;
+    }*/
+
     // get the id from argv
-    int shmid = atoi(&(*argv[1]));
+    int shmid = atoi(&(*argv[1])); //TODO change this to index 0
 
     // production time (we ask the user for seconds but need useconds)
     // we need to integrate Marco's computation for exponential distribution
     // the param index for the time will eventually be different
-    long pt = atoi(&(*argv[3]));
+    long pt = atoi(&(*argv[3]));//TODO change this to index 1
     pt = pt * 1000000;
+
+    if(shmid < 1 || pt < 1){
+        fprintf(stderr, usage_msj, "All values must be a positive number!\n");
+        return EXIT_FAILURE;
+    }
 
     // semaphores configuration
     struct sembuf sb  = {0, -1, 0};

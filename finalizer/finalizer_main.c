@@ -11,10 +11,16 @@ shared_memory *sm_ptr;
 
 int main(int argc, char **argv)
 {
+    char usage_msj[] = "Usage: ./finalizer_main sharedMemoryId(int)\n %s";
     printf("finalizer program\n");
 
     //get the id from argv
-    int shmid = atoi(&(*argv[1])); 
+    int shmid = atoi(&(*argv[1])); //TODO change this to index 0
+
+    if(shmid < 1){
+        fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
+        return EXIT_FAILURE;
+    }
   
     // shmat to attach to shared memory 
     sm_ptr = (shared_memory*) shmat(shmid, 0,0);
