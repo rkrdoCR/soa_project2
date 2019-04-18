@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     pt = pt * 1000000;
 
     if(shmid < 1 || pt < 1){
-        fprintf(stderr, usage_msj, "All values must be a positive number!\n");
+        fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
         return EXIT_FAILURE;
     }
 

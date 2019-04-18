@@ -172,7 +172,7 @@ La siguiente es la metodología seguida por el grupo de trabajo para la solució
 |    |--creator_main.c
 |---data_estructures
 |    |--circular_buffer.c
-|	 |--circular_buffer.h 
+|    |--circular_buffer.h 
 |    |--message.c
 |    |--message.h
 |    |--semaphore_union.c
@@ -189,6 +189,29 @@ La siguiente es la metodología seguida por el grupo de trabajo para la solució
 |    |--time_util.c
 |    |--time_util.h
 ```
+2. La ejecución de lo programas deben seguir el siguiente orden:
+	1. El primer programa a ejecutar es el _creator_ con la siguiente sintasis:
+
+			./creator_main bufferSize(int)
+
+		Donde _bufferSize_ es un número entero mayor a 0 para asignar el tamaño de la memoria compartida. La salida de este programa va a ser el el ID de la memoria compartida que los demás programas van a usar.
+	2. A partir de este momento se puede usar la memoria compartida, lo ideal sería empezar con los productores para que vayan escribiendo mensajes en ese espacio.
+
+			./producer_main sharedMemoryId(int) productionTime(int)
+
+		Este programa necesita dos parámetros para su ejecución el primero es el id de la memoria compartida (se obtuvo con el creator_main) y el segundo es la media en segundos de los tiempos aleatorios, este valor va a seguir una distribución exponencial que debe esperar antes de agregar un nuevo mensaje en el buffer.
+	3. Una vez los productores estén generando mensajes en el buffer compartido los consumidores van a poder leerlos. Es importante recalcar que si la ejecución se hace de forma inversa (primero los consumidores) las aplicaciones van a funcionar de forma correcta.
+
+			./consumer_main sharedMemoryId(int) consumptionTime(int)
+
+		Este programa también necesita dos parámetros el primero es el id de la memoria compartida (se obtuvo con el creator_main) y el segundo es la media en segundos de los tiempos aleatorios, este valor va a seguir una distribución exponencial que debe esperar antes de consumir un nuevo mensaje en el buffer.
+	
+	4. En el momento que se quiera detener la generación y lectura de mensajes por parte de los productores y consumidores respectivamente se necesita ejecutar al finalizador
+
+				./finalizer_main sharedMemoryId(int)
+		
+		Con únicamente el valor del ID de la memoria compartida el finalizador va a ser capaz de detener todos los procesos, liberar los recursos y generar un reporte.
+
  
 
 Información sobre cambios y limitaciones del programa:
