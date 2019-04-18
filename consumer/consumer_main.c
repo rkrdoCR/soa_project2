@@ -6,7 +6,8 @@
 #include <unistd.h>
 #include <time.h>
 
-#include "data_structures/shared_memory.h"
+#include "../data_structures/shared_memory.h"
+#include "../data_structures/circular_buffer.h"
 
 shared_memory *sm_ptr;
 

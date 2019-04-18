@@ -6,7 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "data_structures/message.h"
+//#include "data_structures/message.h"
+#include "message.h"
 
 typedef struct
 {

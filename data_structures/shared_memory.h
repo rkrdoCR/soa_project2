@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 #include <sys/ipc.h>
+#include <sys/shm.h>
+
 
 #include "circular_buffer.h"
 #include "semaphore_union.h"

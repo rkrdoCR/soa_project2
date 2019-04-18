@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <time.h>
 
-#include "utilities/time_util.h"
-#include "data_structures/shared_memory.h"
+#include "../utilities/time_util.h"
+#include "../data_structures/shared_memory.h"
 
 shared_memory *sm_ptr;
 message *msg;

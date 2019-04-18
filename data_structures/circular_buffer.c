@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "utilities/time_util.h"
+#include "../utilities/time_util.h"
 #include "circular_buffer.h"
 #include "message.h"
 

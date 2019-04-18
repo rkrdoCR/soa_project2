@@ -2,13 +2,15 @@
 #include <sys/shm.h> 
 #include <stdio.h> 
 
-#include "data_structures/shared_memory.h"
+#include "../data_structures/shared_memory.h"
 
 shared_memory *sm_ptr;
 
 int main(int argc, char **argv)
 { 
     char usage_msj[] = "Usage: ./creator_main bufferSize(int)\n %s";
+
+    
     /*
     ***********Add this when we stop using launch.json for debug***********
     if(argc != 1){
