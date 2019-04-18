@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "../utilities/time_util.h"
+#include "../utilities/exp_dist.h"
 #include "../data_structures/shared_memory.h"
 
 shared_memory *sm_ptr;
@@ -16,6 +17,9 @@ message *msg;
 int main(int argc, char **argv)
 {
     char usage_msj[] = "Usage: ./producer_main sharedMemoryId(int) productionTime(int)\n %s";
+
+    //Setting random for exponential distribution
+    exponential_dist_setup();
     /*
     ***********Add this when we stop using launch.json for debug***********
     if(argc != 2){
@@ -29,13 +33,18 @@ int main(int argc, char **argv)
     // production time (we ask the user for seconds but need useconds)
     // we need to integrate Marco's computation for exponential distribution
     // the param index for the time will eventually be different
-    long pt = atoi(&(*argv[3]));//TODO change this to index 1
-    pt = pt * 1000000;
+    long pt = atoi(&(*argv[2]));//TODO change this to index 1
+
 
     if(shmid < 1 || pt < 1){
         fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
         return EXIT_FAILURE;
     }
+
+    pt = pt * 1000000;
+
+    //calculating random delay with exponential distribution with mean of "pt"
+    int exp_delay=exponential_dist(pt);
 
     // semaphores configuration
     struct sembuf sb  = {0, -1, 0};
@@ -50,7 +59,8 @@ int main(int argc, char **argv)
 
     while (1) // this condition should be changed so the loop goes until the producer is said to no longer produce
     {
-        usleep(pt);
+        //producer is going to wait a exp_delay that is a random number calculated from exponential distribution
+        usleep(exp_delay);
         semop(sm_ptr->semid, &sb2, 1); // prevents overflow
         semop(sm_ptr->semid, &sb, 1);  // controls buffer access
 

@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <time.h>
 
+#include "../utilities/exp_dist.h"
 #include "../data_structures/shared_memory.h"
 #include "../data_structures/circular_buffer.h"
 
@@ -14,6 +15,9 @@ shared_memory *sm_ptr;
 int main(int argc, char **argv)
 { 
     char usage_msj[] = "Usage: ./consumer_main sharedMemoryId(int) consumptionTime(int)\n %s";
+
+    //Setting random for exponential distribution
+    exponential_dist_setup();
     /*
     ***********Add this when we stop using launch.json for debug***********
     if(argc != 2){
@@ -26,13 +30,17 @@ int main(int argc, char **argv)
 
     // consumption time (we ask the user for seconds but need useconds)
     // check in the project spec what is needed here!!!
-    long pt = atoi(&(*argv[3]));//TODO change this to index 2
-    pt = pt * 1000000;
+    long pt = atoi(&(*argv[2]));//TODO change this to index 2
 
     if(shmid < 1 || pt < 1){
         fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
         return EXIT_FAILURE;
     }
+
+    pt = pt * 1000000;
+
+    //calculating random delay with exponential distribution with mean of "pt"
+    int exp_delay=exponential_dist(pt);
 
     // semaphores configuration
     struct sembuf sb  = {0, -1, 0};
@@ -47,7 +55,7 @@ int main(int argc, char **argv)
     
     while(1) // this condition must be changed so it loops until the consumer is said to no longer consume
     {
-        usleep(2000000); // the value should be taken from the console arguments (check project spec for details)
+        usleep(exp_delay); // the value should be taken from the console arguments (check project spec for details)
         semop(sm_ptr->semid, &sb1, 1); // prevents underflow
         semop(sm_ptr->semid, &sb, 1);  // controls buffer access
 
