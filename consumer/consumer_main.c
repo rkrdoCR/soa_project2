@@ -45,8 +45,7 @@ int main(int argc, char **argv)
 
     pt = pt * 1000000;
 
-    //calculating random delay with exponential distribution with mean of "pt"
-    int exp_delay = exponential_dist(pt);
+    
 
     // semaphores configuration
     struct sembuf sb = {0, -1, 0};
@@ -64,6 +63,8 @@ int main(int argc, char **argv)
 
     while (working) // this condition must be changed so it loops until the consumer is said to no longer consume
     {
+        //calculating random delay with exponential distribution with mean of "pt"
+        int exp_delay = exponential_dist(pt);
         usleep(exp_delay);             // the value should be taken from the console arguments (check project spec for details)
         semop(sm_ptr->semid, &sb1, 1); // prevents underflow
         semop(sm_ptr->semid, &sb, 1);  // controls buffer access

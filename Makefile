@@ -1,4 +1,4 @@
-all: dir creator producer consumer
+all: dir creator producer consumer finalizer
 
 dir:
 	mkdir -p build
@@ -12,3 +12,6 @@ producer: dir
 
 consumer: dir
 	gcc -o build/consumer_main consumer/consumer_main.c data_structures/shared_memory.c data_structures/circular_buffer.c utilities/time_util.c utilities/exp_dist.c -Iutilities -Idata_structures -lm
+
+finalizer: dir
+	gcc -o build/finalizer_main finalizer/finalizer_main.c data_structures/shared_memory.c data_structures/circular_buffer.c utilities/time_util.c utilities/exp_dist.c -Iutilities -Idata_structures -lm
