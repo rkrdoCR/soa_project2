@@ -6,6 +6,7 @@
 
 message *msg;
 
+
 void CB_init(circular_buffer *cb, int size)
 {
     cb->size = size;
@@ -54,8 +55,8 @@ message CB_pop(circular_buffer *cb, int pid)
             cb->start = 0;
         }
 
-        printf("Consumer PID: %d, has pulled a message from index: %d at %s\n",
-        pid, cb->start, cb->messages[cb->start].date);
+        printf("Consumer PID: %d, has pulled a message from index: %d, message: %d at %s \n",
+        pid, cb->start, cb->messages[cb->start].key, cb->messages[cb->start].date );
 
         return element;
     }
