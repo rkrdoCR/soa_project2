@@ -73,7 +73,7 @@ int main(int argc, char **argv)
         (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
         // takes the first item from the buffer
-        message m = CB_pop(sm_ptr->buffer, pid, sm_ptr->consumers_count);
+        message m = CB_pop(sm_ptr->buffer, pid, sm_ptr->consumers_count, sm_ptr->producers_count);
         total_message_processed++;
         //printf("mensaje: %d \n",m.key);
 
