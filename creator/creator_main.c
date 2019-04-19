@@ -55,6 +55,9 @@ int main(int argc, char **argv)
     sm_ptr->buffer = (circular_buffer*)shmat(sm_ptr->cb_shmid, NULL, 0);
     (*sm_ptr->buffer).messages = (message*)shmat(sm_ptr->m_shmid, NULL, 0);
 
+    // suspend producers initialize
+    sm_ptr->suspend_producers=false;
+
     // initialize counters
     sm_ptr->consumers_count = 0;
     sm_ptr->producers_count = 0;
