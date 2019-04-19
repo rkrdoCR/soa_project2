@@ -73,7 +73,7 @@ int main(int argc, char **argv)
         (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
         // takes the first item from the buffer
-        message m = CB_pop(sm_ptr->buffer, pid);
+        message m = CB_pop(sm_ptr->buffer, pid, sm_ptr->consumers_count);
         total_message_processed++;
         //printf("mensaje: %d \n",m.key);
 
@@ -95,6 +95,7 @@ int main(int argc, char **argv)
             gettimeofday(&tv, NULL);
             end_time = tv.tv_sec;
             printf("Consumer PID: %d, Total message: %d, Seconds activity: %ld \n", pid, total_message_processed, (end_time - begin_time));
+            sm_ptr->consumers_count--;  
         }
 
         sb.sem_op = 1;
