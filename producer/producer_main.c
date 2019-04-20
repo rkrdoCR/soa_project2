@@ -23,8 +23,8 @@ int main(int argc, char **argv)
     cronometer_start(&Cronometers.start_execution_time);
 
     
-    printf("The value for CLOCK_PER_SECOND is %ld:", CLOCKS_PER_SEC);
-    printf("The value for start execution is : %ld", Cronometers.start_execution_time);
+    //printf("The value for CLOCK_PER_SECOND is %ld:", CLOCKS_PER_SEC);
+    //printf("The value for start execution is : %ld", Cronometers.start_execution_time);
 
     int number_of_produced_messages=0;
     char usage_msj[] = "Usage: ./producer_main sharedMemoryId(int) productionTime(int)\n %s";
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
         //check if finalizer requested end of life
         //printf("this is the value of suspend_producers: %s", sm_ptr->suspend_producers? "true": "false");
         if(sm_ptr->suspend_producers==true){
-            sm_ptr->consumers_count--;
+            sm_ptr->producers_count--;
             break;
         }
         //calculating random delay with exponential distribution with mean of "pt"
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
         (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
         // append message to the buffer
-        CB_push(sm_ptr->buffer, pid, 1);
+        CB_push(sm_ptr->buffer, pid, rand()%5,sm_ptr->consumers_count,sm_ptr->producers_count);
         //increment produced messages
         number_of_produced_messages++;
 
@@ -130,6 +130,7 @@ int main(int argc, char **argv)
 
     printf("==========================================================\n");
     printf("== Report of producer with id: %d                  ===\n",pid);
+    printf("== Number of messages produced: %d                  ===\n",number_of_produced_messages);
     printf("== Total execution time is: %d (s)                      ==\n",Cronometers.execution_time);
     printf("== Total time spent in delay is: %d (s)                 ==\n",Cronometers.time_spent_in_exp_dist_delay);
     printf("== Total time spent waiting for shared mem is: %d (s)   ==\n",Cronometers.time_spent_waiting_shared_memory);

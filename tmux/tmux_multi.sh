@@ -28,7 +28,14 @@ create_pane () {
 }
 
 create_multi_pane () {
-    read -p "Enter pane reference number> " ref_pane
+    if [ "$1" = "p" ]; then
+        PANE_REF=2
+    elif [ "$1" = "c" ]; then
+        PANE_REF=4
+    else
+        PANE_REF=2
+    fi
+    read -e -p "Enter pane reference number> " -i "$PANE_REF" ref_pane
     PANE_REF=$ref_pane
     create_pane
 }
@@ -39,25 +46,35 @@ launch_program () {
     do
     SUM=$[$PANE_REF+$i]
     tmux select-pane -t $SUM
-    tmux send-keys "./$name_exe $id_mem 2" C-m
+    tmux send-keys "clear" C-m
+    tmux send-keys "./$name_exe $id_mem $[$RANDOM%10]" C-m
     i=$[$i+1]
     done
 }
 
-cd $PROJECT2_SEMAPHORES_HOME/build
+########################################
+## input from user
+########################################
 
-read -e -p "Enter name of executable> " name_exe
+if [ "$1" = "p" ]; then
+    #echo "Positional parameter 1 contains something"
+    read -e -p "Enter name of executable> " -i "producer_main" name_exe
+elif [ "$1" = "c" ]; then
+    #echo "Positional parameter 1 contains something"
+    read -e -p "Enter name of executable> " -i "consumer_main" name_exe
+else
+    #echo "Positional parameter 1 is empty"
+    read -e -p "Enter name of executable> " -i "producer_main" name_exe
+fi
 
 read -p "Enter ID of shared memory> " id_mem
+
+#########################################
+
+
+
+cd $PROJECT2_SEMAPHORES_HOME/build
 
 create_multi_pane
 
 launch_program
-
-
- 
-# tmux send-keys "clear" C-m
-# tmux send-keys "echo top" C-m
-# tmux send-keys "source $PROJECT2_SEMAPHORES_HOME/set_environment_variables" C-m
-# tmux send-keys "cd $PROJECT2_SEMAPHORES_HOME/build" C-m
-# tmux send-keys "clear" C-m

@@ -7,3 +7,10 @@
 # ------------------------------------------------------------------
 
 alias e='exit'
+alias p='./producer_main'
+alias c='./consumer_main'
+alias cr='./creator_main'
+alias f='./finalizer_main'
+
+alias mp='source ./tmux/tmux_multi.sh p'
+alias mc='source ./tmux/tmux_multi.sh c'

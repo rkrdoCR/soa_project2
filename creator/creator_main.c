@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     }*/
 
     //get the buffersize from argv
-    int buffer_size = atoi(&(*argv[2]));//TODO change this to index 0
+    int buffer_size = atoi(&(*argv[1]));
 
     if(buffer_size < 1){
         fprintf(stderr, usage_msj, "Buffer size must be a positive number greater than zero!\n");

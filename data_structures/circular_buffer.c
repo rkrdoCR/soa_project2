@@ -14,7 +14,7 @@ void CB_init(circular_buffer *cb, int size)
     cb->count = 0;
 }
 
-void CB_push(circular_buffer *cb, int pid, int k)
+void CB_push(circular_buffer *cb, int pid, int k, int total_consumer, int total_producer)
 {
     int index;
     if (CB_full(cb))
@@ -32,8 +32,8 @@ void CB_push(circular_buffer *cb, int pid, int k)
         cb->messages[index].pid = pid;
         strcpy(cb->messages[index].date, get_current_date());
 
-        printf("Producer PID: %d, has pushed a message to index: %d at %s\n",
-        pid, index, cb->messages[index].date);
+        printf("Producer PID: %d, has pushed a message to index: %d at %s, total producers: %d, total consumers: %d\n",
+        pid, index, cb->messages[index].date,total_producer, total_consumer);
     }
 }
 

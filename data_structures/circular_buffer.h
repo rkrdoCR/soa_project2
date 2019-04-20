@@ -19,7 +19,7 @@ typedef struct
 } circular_buffer;
 
 void CB_init(circular_buffer *cb, int size);
-void CB_push(circular_buffer *cb, int pid, int k);
+void CB_push(circular_buffer *cb, int pid, int k,  int total_consumer, int total_producer);
 message CB_pop(circular_buffer *cb, int pid,  int total_consumer, int total_producer);
 bool CB_full(circular_buffer *cb);
 bool CB_empty(circular_buffer *cb);
