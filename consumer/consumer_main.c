@@ -45,8 +45,6 @@ int main(int argc, char **argv)
 
     pt = pt * 1000000;
 
-    
-
     // semaphores configuration
     struct sembuf sb = {0, -1, 0};
     struct sembuf sb1 = {1, -1, 0};
@@ -85,18 +83,18 @@ int main(int argc, char **argv)
         {
             if (m.key == 6)
             {
-                printf("***Mensaje propio de apagarse, mensaje %d \n", m.key);
+                printf("--> Consumer PID: %d, Recibi mensaje propio de apagarse, mensaje: %d \n", pid, m.key);
             }
             else
             {
-                printf("***me debo apagar mod 5 mi pid: %d, mensaje %d \n", (get_mod(pid)), m.key);
+                printf("--> Consumer PID: %d, Mensaje mod 5 mi pid: %d, mensaje %d \n", pid, (get_mod(pid)), m.key);
             }
 
             working = false;
             gettimeofday(&tv, NULL);
             end_time = tv.tv_sec;
             printf("Consumer PID: %d, Total message: %d, Seconds activity: %ld \n", pid, total_message_processed, (end_time - begin_time));
-            sm_ptr->consumers_count--;  
+            sm_ptr->consumers_count--;
         }
 
         sb.sem_op = 1;
