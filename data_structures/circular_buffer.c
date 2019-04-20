@@ -37,7 +37,7 @@ void CB_push(circular_buffer *cb, int pid, int k, int total_consumer, int total_
     }
 }
 
-message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_producer)
+message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_producers)
 {
     message element;
     if (CB_empty(cb))
@@ -55,8 +55,8 @@ message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_produ
             cb->start = 0;
         }
 
-        printf("Consumer PID: %d, has pulled a message from index: %d, message: %d, Total consumer: %d, at %s \n",
-        pid, cb->start, cb->messages[cb->start].key, total_consumer, cb->messages[cb->start].date );
+        printf("Consumer PID: %d, has pulled a message from index: %d, message: %d, Total consumer: %d, Total producers: %d, at %s \n",
+        pid, cb->start, cb->messages[cb->start].key, total_consumer, total_producers, cb->messages[cb->start].date );
 
         return element;
     }
