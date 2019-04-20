@@ -22,8 +22,8 @@ int main(int argc, char **argv)
     init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
     cronometer_start(&Cronometers.start_execution_time);
 
+    printf("Im getting to crono start");
     
-    //printf("The value for CLOCK_PER_SECOND is %ld:", CLOCKS_PER_SEC);
     //printf("The value for start execution is : %ld", Cronometers.start_execution_time);
 
     int number_of_produced_messages=0;
@@ -67,6 +67,7 @@ int main(int argc, char **argv)
     sm_ptr->producers_count++;
     int pid = getpid();
 
+    
     while (1) // this condition should be changed so the loop goes until the producer is said to no longer produce
     {
         //check if finalizer requested end of life
@@ -105,8 +106,10 @@ int main(int argc, char **argv)
         sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
         (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
 
+        sm_ptr->total_messages++;
+
         // append message to the buffer
-        CB_push(sm_ptr->buffer, pid, rand()%5,sm_ptr->consumers_count,sm_ptr->producers_count);
+        CB_push(sm_ptr->buffer, pid, rand()%5,sm_ptr->consumers_count,sm_ptr->producers_count, sm_ptr->total_messages);
         //increment produced messages
         number_of_produced_messages++;
 

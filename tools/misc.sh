@@ -14,3 +14,5 @@ alias f='./finalizer_main'
 
 alias mp='source ./tmux/tmux_multi.sh p'
 alias mc='source ./tmux/tmux_multi.sh c'
+
+alias m='source ./tmux/tmux_script_poc'

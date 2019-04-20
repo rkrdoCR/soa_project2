@@ -74,9 +74,10 @@ int main(int argc, char **argv)
         // attach buffer and messages structures to the shared memory
         sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
         (*sm_ptr->buffer).messages = (message *)shmat(sm_ptr->m_shmid, NULL, 0);
-
+        
+        sm_ptr->total_messages++;
         // append message to the buffer
-        CB_push(sm_ptr->buffer, pid, 6,sm_ptr->consumers_count,sm_ptr->producers_count);
+        CB_push(sm_ptr->buffer, pid, 6,sm_ptr->consumers_count,sm_ptr->producers_count,sm_ptr->total_messages);
 
 
 

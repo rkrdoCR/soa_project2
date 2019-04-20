@@ -28,10 +28,10 @@ create_pane () {
 }
 
 create_multi_pane () {
-    if [ "$1" = "p" ]; then
+    if [ "$ARG_ONE" == "p" ]; then
         PANE_REF=2
-    elif [ "$1" = "c" ]; then
-        PANE_REF=4
+    elif [ "$ARG_ONE" == "c" ]; then
+        PANE_REF=5
     else
         PANE_REF=2
     fi
@@ -47,7 +47,7 @@ launch_program () {
     SUM=$[$PANE_REF+$i]
     tmux select-pane -t $SUM
     tmux send-keys "clear" C-m
-    tmux send-keys "./$name_exe $id_mem $[$RANDOM%10]" C-m
+    tmux send-keys "./$name_exe $id_mem $[$RANDOM%10 + 1]" C-m
     i=$[$i+1]
     done
 }
@@ -55,6 +55,8 @@ launch_program () {
 ########################################
 ## input from user
 ########################################
+
+ARG_ONE=$1
 
 if [ "$1" = "p" ]; then
     #echo "Positional parameter 1 contains something"

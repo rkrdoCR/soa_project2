@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <time.h>
 
+#include "../utilities/time_util.h"
 #include "../utilities/exp_dist.h"
 #include "../utilities/check_mod.c"
 #include "../data_structures/shared_memory.h"
@@ -14,12 +15,18 @@
 
 shared_memory *sm_ptr;
 int total_message_processed = 0;
-long begin_time, end_time = 0;
+//long begin_time, end_time = 0;
+crono Cronometers;
 
 int main(int argc, char **argv)
 {
-    struct timeval tv;
+    init_cronometer(&Cronometers.execution_time);
+    init_cronometer(&Cronometers.time_spent_in_exp_dist_delay);
+    init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
+    cronometer_start(&Cronometers.start_execution_time);
+    //struct timeval tv;
     char usage_msj[] = "Usage: ./consumer_main sharedMemoryId(int) consumptionTime(int)\n %s";
+
 
     //Setting random for exponential distribution
     exponential_dist_setup();
@@ -56,16 +63,29 @@ int main(int argc, char **argv)
     sm_ptr->consumers_count++;
     int pid = getpid();
     bool working = true;
-    gettimeofday(&tv, NULL);
-    begin_time = tv.tv_sec;
+    //gettimeofday(&tv, NULL);
+    //begin_time = tv.tv_sec;
 
     while (working) // this condition must be changed so it loops until the consumer is said to no longer consume
     {
         //calculating random delay with exponential distribution with mean of "pt"
         int exp_delay = exponential_dist(pt);
+        cronometer_start(&Cronometers.start_delay_time); //timestamp from the instant when delay starts
         usleep(exp_delay);             // the value should be taken from the console arguments (check project spec for details)
+        cronometer_end(&Cronometers.end_delay_time); //timestamp from the instant when delay ends
+
+        //save the time spent in last delay
+        save_time_spent(&Cronometers.start_delay_time, &Cronometers.end_delay_time, &Cronometers.time_spent_in_exp_dist_delay);
+
+
+        //timestamp from the instant when request to shared memory starts
+        cronometer_start(&Cronometers.start_waiting_time);
         semop(sm_ptr->semid, &sb1, 1); // prevents underflow
         semop(sm_ptr->semid, &sb, 1);  // controls buffer access
+
+        //timestamp from the instant when request to shared memory starts
+        cronometer_end(&Cronometers.end_waiting_time);
+        save_time_spent(&Cronometers.start_waiting_time, &Cronometers.end_waiting_time, &Cronometers.time_spent_waiting_shared_memory);
 
         // attach buffer and messages structures to the shared memory
         sm_ptr->buffer = (circular_buffer *)shmat(sm_ptr->cb_shmid, NULL, 0);
@@ -91,10 +111,21 @@ int main(int argc, char **argv)
             }
 
             working = false;
-            gettimeofday(&tv, NULL);
-            end_time = tv.tv_sec;
-            printf("Consumer PID: %d, Total message: %d, Seconds activity: %ld \n", pid, total_message_processed, (end_time - begin_time));
+            //gettimeofday(&tv, NULL);
+            cronometer_end(&Cronometers.end_execution_time);
+            //printf("The value for end execution is : %ld", Cronometers.end_execution_time);
+            save_time_spent(&Cronometers.start_execution_time, &Cronometers.end_execution_time, &Cronometers.execution_time);
+
+            //end_time = tv.tv_sec;
+            //printf("Consumer PID: %d, Total message: %d, Seconds activity: %ld \n", pid, total_message_processed, (end_time - begin_time));
             sm_ptr->consumers_count--;
+            printf("==========================================================\n");
+            printf("== Report of consumer with id: %d                      ===\n",pid);
+            printf("== Number of messages consumed: %d                     ===\n",total_message_processed);
+            printf("== Total execution time is: %d (s)                      ==\n",Cronometers.execution_time);
+            printf("== Total time spent in delay is: %d (s)                 ==\n",Cronometers.time_spent_in_exp_dist_delay);
+            printf("== Total time spent waiting for shared mem is: %d (s)   ==\n",Cronometers.time_spent_waiting_shared_memory);
+            printf("==========================================================\n");
         }
 
         sb.sem_op = 1;

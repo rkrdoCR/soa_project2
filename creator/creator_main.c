@@ -59,6 +59,7 @@ int main(int argc, char **argv)
     sm_ptr->suspend_producers=false;
 
     // initialize counters
+    sm_ptr->total_messages = 0;
     sm_ptr->consumers_count = 0;
     sm_ptr->producers_count = 0;
 

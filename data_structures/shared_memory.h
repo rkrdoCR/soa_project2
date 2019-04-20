@@ -13,6 +13,7 @@
 
 typedef struct
 {
+    int total_messages;
     bool suspend_producers;
     int producers_count;
     int consumers_count;

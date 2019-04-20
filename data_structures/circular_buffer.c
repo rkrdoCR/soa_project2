@@ -14,7 +14,7 @@ void CB_init(circular_buffer *cb, int size)
     cb->count = 0;
 }
 
-void CB_push(circular_buffer *cb, int pid, int k, int total_consumer, int total_producer)
+void CB_push(circular_buffer *cb, int pid, int k, int total_consumer, int total_producer, int message_id)
 {
     int index;
     if (CB_full(cb))
@@ -28,18 +28,20 @@ void CB_push(circular_buffer *cb, int pid, int k, int total_consumer, int total_
         {
             index = 0;
         }
+        cb->messages[index].id = message_id;
         cb->messages[index].key = k;
         cb->messages[index].pid = pid;
         strcpy(cb->messages[index].date, get_current_date());
 
-        printf("Producer PID: %d, has pushed a message to index: %d at %s, total producers: %d, total consumers: %d\n",
-        pid, index, cb->messages[index].date,total_producer, total_consumer);
+        printf("Producer PID: %d, has pushed a message with id: %d to index: %d at %s, key: %d, total producers: %d, total consumers: %d\n",
+        pid, message_id, index, cb->messages[index].date, k,total_producer, total_consumer);
     }
 }
 
 message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_producers)
 {
     message element;
+    int index=0;
     if (CB_empty(cb))
     {
         printf("Buffer underflow\n");
@@ -48,6 +50,7 @@ message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_produ
     else
     {
         element = cb->messages[cb->start];
+        index=cb->start;
         cb->start++;
         cb->count--;
         if (cb->start == cb->size)
@@ -55,8 +58,8 @@ message CB_pop(circular_buffer *cb, int pid, int total_consumer, int total_produ
             cb->start = 0;
         }
 
-        printf("Consumer PID: %d, has pulled a message from index: %d, message: %d, Total consumer: %d, Total producers: %d, at %s \n",
-        pid, cb->start, cb->messages[cb->start].key, total_consumer, total_producers, cb->messages[cb->start].date );
+        printf("Consumer PID: %d, has pulled a message with id: %d from index: %d, key: %d, Total consumer: %d, Total producers: %d, at %s \n",
+        pid, cb->messages[index].id , index, cb->messages[index].key, total_consumer, total_producers, cb->messages[index].date );
 
         return element;
     }

@@ -3,6 +3,7 @@
 
 typedef struct
 {
+    int id;
     int pid;
     int key;
     char date[30];
