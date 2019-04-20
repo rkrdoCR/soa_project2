@@ -1,0 +1,78 @@
+#!/bin/bash
+
+TOP_REF=1
+MIDDLE_1_REF=2
+MIDDLE_2_REF=3
+BOTTOM_REF=4
+PANE_REF=2
+PANE_AUX=2
+
+SESSION=$USER
+
+tmux -2 new-session -d -s $SESSION
+
+# Setup a window for tailing log files
+tmux new-window -t $SESSION:1 -n 'Semaforos'
+
+
+#create horizontal divisions in window
+tmux split-window -v
+tmux split-window -v
+
+
+
+#create vertical divisions in the middle pane
+tmux select-pane -t 2
+tmux split-window -h
+
+#resize top and bottom
+tmux select-pane -t $TOP_REF
+tmux resize-pane -U 30
+tmux select-pane -t $MIDDLE_1_REF
+tmux resize-pane -U 30
+tmux select-pane -t $MIDDLE_2_REF
+tmux resize-pane -U 30
+
+tmux select-pane -t $BOTTOM_REF
+tmux resize-pane -D 30
+tmux select-pane -t $MIDDLE_1_REF
+tmux resize-pane -D 30
+tmux select-pane -t $MIDDLE_2_REF
+tmux resize-pane -D 30
+
+tmux select-pane -t $TOP_REF 
+tmux send-keys "clear" C-m
+tmux send-keys "echo top" C-m
+tmux send-keys "source $PROJECT2_SEMAPHORES_HOME/set_environment_variables" C-m
+tmux send-keys "cd $PROJECT2_SEMAPHORES_HOME/build" C-m
+tmux send-keys "clear" C-m
+
+
+tmux select-pane -t $MIDDLE_1_REF 
+tmux send-keys "clear" C-m
+tmux send-keys "echo middle 1" C-m
+tmux send-keys "source $PROJECT2_SEMAPHORES_HOME/set_environment_variables" C-m
+tmux send-keys "cd $PROJECT2_SEMAPHORES_HOME" C-m
+tmux send-keys "clear" C-m
+
+
+tmux select-pane -t  $MIDDLE_2_REF
+tmux send-keys "clear" C-m
+tmux send-keys "echo middle 2" C-m
+tmux send-keys "source $PROJECT2_SEMAPHORES_HOME/set_environment_variables" C-m
+tmux send-keys "cd $PROJECT2_SEMAPHORES_HOME" C-m
+tmux send-keys "clear" C-m
+
+tmux select-pane -t $BOTTOM_REF
+tmux send-keys "clear" C-m
+tmux send-keys "echo bottom" C-m
+tmux send-keys "source $PROJECT2_SEMAPHORES_HOME/set_environment_variables" C-m
+tmux send-keys "cd $PROJECT2_SEMAPHORES_HOME/build" C-m
+tmux send-keys "clear" C-m
+
+
+# Set default window
+tmux select-window -t $SESSION:1
+
+# Attach to session
+tmux -2 attach-session -t $SESSION

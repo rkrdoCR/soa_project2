@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     while (1) // this condition should be changed so the loop goes until the producer is said to no longer produce
     {
         //check if finalizer requested end of life
-        printf("this is the value of suspend_producers: %s", sm_ptr->suspend_producers? "true": "false");
+        //printf("this is the value of suspend_producers: %s", sm_ptr->suspend_producers? "true": "false");
         if(sm_ptr->suspend_producers==true){
             sm_ptr->consumers_count--;
             break;
@@ -80,14 +80,14 @@ int main(int argc, char **argv)
 
         //timestamp from the instant when delay starts
         cronometer_start(&Cronometers.start_delay_time);
-        printf("The value for start delay is : %ld", Cronometers.start_delay_time);
+        //printf("The value for start delay is : %ld", Cronometers.start_delay_time);
 
         //producer is going to wait a exp_delay that is a random number calculated from exponential distribution
         usleep(exp_delay);
 
         //timestamp from the instant when delay ends
         cronometer_end(&Cronometers.end_delay_time);
-        printf("The value for end delay is : %ld", Cronometers.end_delay_time);
+        //printf("The value for end delay is : %ld", Cronometers.end_delay_time);
 
         //save the time spent in last delay
         save_time_spent(&Cronometers.start_delay_time, &Cronometers.end_delay_time, &Cronometers.time_spent_in_exp_dist_delay);
@@ -125,14 +125,14 @@ int main(int argc, char **argv)
     //-Time spent while waiting for shared memory
     //-Good Bye message
     cronometer_end(&Cronometers.end_execution_time);
-    printf("The value for end execution is : %ld", Cronometers.end_execution_time);
+    //printf("The value for end execution is : %ld", Cronometers.end_execution_time);
     save_time_spent(&Cronometers.start_execution_time, &Cronometers.end_execution_time, &Cronometers.execution_time);
 
     printf("==========================================================\n");
     printf("== Report of producer with id: %d                  ===\n",pid);
-    printf("== Total execution time is: %d                       ==\n",Cronometers.execution_time);
-    printf("== Total time spent in delay is: %d                  ==\n",Cronometers.time_spent_in_exp_dist_delay);
-    printf("== Total time spent waiting for shared mem is: %d    ==\n",Cronometers.time_spent_waiting_shared_memory);
+    printf("== Total execution time is: %d (s)                      ==\n",Cronometers.execution_time);
+    printf("== Total time spent in delay is: %d (s)                 ==\n",Cronometers.time_spent_in_exp_dist_delay);
+    printf("== Total time spent waiting for shared mem is: %d (s)   ==\n",Cronometers.time_spent_waiting_shared_memory);
     printf("==========================================================\n");
 
     //detach from shared memory
