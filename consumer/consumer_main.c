@@ -119,13 +119,13 @@ int main(int argc, char **argv)
             //end_time = tv.tv_sec;
             //printf("Consumer PID: %d, Total message: %d, Seconds activity: %ld \n", pid, total_message_processed, (end_time - begin_time));
             sm_ptr->consumers_count--;
-            printf("==========================================================\n");
-            printf("== Report of consumer with id: %d                      ===\n",pid);
-            printf("== Number of messages consumed: %d                     ===\n",total_message_processed);
-            printf("== Total execution time is: %d (s)                      ==\n",Cronometers.execution_time);
-            printf("== Total time spent in delay is: %d (s)                 ==\n",Cronometers.time_spent_in_exp_dist_delay);
-            printf("== Total time spent waiting for shared mem is: %d (s)   ==\n",Cronometers.time_spent_waiting_shared_memory);
-            printf("==========================================================\n");
+            printf("===============================================================\n");
+            printf("=== Report of consumer with id: %5d                       ===\n",pid);
+            printf("=== Number of messages consumed: %5d                      ===\n",total_message_processed);
+            printf("=== Total execution time is: %5d (s)                      ===\n",Cronometers.execution_time);
+            printf("=== Total time spent in delay is: %5d (s)                 ===\n",Cronometers.time_spent_in_exp_dist_delay);
+            printf("=== Total time spent waiting for shared mem is: %5d (s)   ===\n",Cronometers.time_spent_waiting_shared_memory);
+           printf("===============================================================\n");
         }
 
         sb.sem_op = 1;
