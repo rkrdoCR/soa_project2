@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------
 
 alias e='exit'
+alias b='cd build'
 alias p='./producer_main'
 alias c='./consumer_main'
 alias cr='./creator_main'

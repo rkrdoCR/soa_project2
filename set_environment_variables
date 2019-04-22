@@ -6,8 +6,8 @@
 #           
 # ------------------------------------------------------------------
 
-source tools/misc.sh
+source $PROJECT2_SEMAPHORES_HOME/tools/misc.sh
 
-PROJECT2_SEMAPHORES_HOME=$(pwd)
+#PROJECT2_SEMAPHORES_HOME=$(pwd)
 
 
