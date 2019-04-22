@@ -20,35 +20,33 @@ crono Cronometers;
 
 int main(int argc, char **argv)
 {
-    init_cronometer(&Cronometers.execution_time);
-    init_cronometer(&Cronometers.time_spent_in_exp_dist_delay);
-    init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
-    cronometer_start(&Cronometers.start_execution_time);
-    //struct timeval tv;
     char usage_msj[] = "Usage: ./consumer_main sharedMemoryId(int) consumptionTime(int)\n %s";
-
 
     //Setting random for exponential distribution
     exponential_dist_setup();
-    /*
-    ***********Add this when we stop using launch.json for debug***********
-    if(argc != 2){
+   
+    if(argc != 3){
         fprintf(stderr, usage_msj, "Parameter count!\n");
         return EXIT_FAILURE;
-    }*/
+    }
 
     //get the id from argv
-    int shmid = atoi(&(*argv[1])); //TODO change this to index 0
+    int shmid = atoi(&(*argv[1]));
 
     // consumption time (we ask the user for seconds but need useconds)
     // check in the project spec what is needed here!!!
-    long pt = atoi(&(*argv[2])); //TODO change this to index 2
+    long pt = atoi(&(*argv[2]));
 
     if (shmid < 1 || pt < 1)
     {
         fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
         return EXIT_FAILURE;
     }
+
+    init_cronometer(&Cronometers.execution_time);
+    init_cronometer(&Cronometers.time_spent_in_exp_dist_delay);
+    init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
+    cronometer_start(&Cronometers.start_execution_time);
 
     pt = pt * 1000000;
 

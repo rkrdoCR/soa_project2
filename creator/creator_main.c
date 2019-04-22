@@ -10,13 +10,11 @@ int main(int argc, char **argv)
 { 
     char usage_msj[] = "Usage: ./creator_main bufferSize(int)\n %s";
 
-    
-    /*
-    ***********Add this when we stop using launch.json for debug***********
-    if(argc != 1){
+
+    if(argc != 2){
         fprintf(stderr, usage_msj, "Parameter count!\n");
         return EXIT_FAILURE;
-    }*/
+    }
 
     //get the buffersize from argv
     int buffer_size = atoi(&(*argv[1]));

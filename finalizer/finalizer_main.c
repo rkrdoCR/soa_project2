@@ -19,23 +19,25 @@ int total_producers = 0;
 
 int main(int argc, char **argv)
 {
-    init_cronometer(&Cronometers.execution_time);
-    init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
-    cronometer_start(&Cronometers.start_execution_time);
-
     int user_input;
     char usage_msj[] = "Usage: ./finalizer_main sharedMemoryId(int)\n %s";
 
-    printf("finalizer program\n");
-
+    if(argc != 2){
+        fprintf(stderr, usage_msj, "Parameter count!\n");
+        return EXIT_FAILURE;
+    } 
     //get the id from argv
-    int shmid = atoi(&(*argv[1])); //TODO change this to index 0
+    int shmid = atoi(&(*argv[1]));
 
     if (shmid < 1)
     {
         fprintf(stderr, usage_msj, "All values must be a positive number greater than zero!\n");
         return EXIT_FAILURE;
     }
+    printf("finalizer program\n");
+    init_cronometer(&Cronometers.execution_time);
+    init_cronometer(&Cronometers.time_spent_waiting_shared_memory);
+    cronometer_start(&Cronometers.start_execution_time);
 
     // shmat to attach to shared memory
     sm_ptr = (shared_memory *)shmat(shmid, 0, 0);
