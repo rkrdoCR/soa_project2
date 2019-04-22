@@ -131,13 +131,13 @@ int main(int argc, char **argv)
     //printf("The value for end execution is : %ld", Cronometers.end_execution_time);
     save_time_spent(&Cronometers.start_execution_time, &Cronometers.end_execution_time, &Cronometers.execution_time);
 
-    printf("==========================================================\n");
-    printf("== Report of producer with id: %d                  ===\n",pid);
-    printf("== Number of messages produced: %d                  ===\n",number_of_produced_messages);
-    printf("== Total execution time is: %d (s)                      ==\n",Cronometers.execution_time);
-    printf("== Total time spent in delay is: %d (s)                 ==\n",Cronometers.time_spent_in_exp_dist_delay);
-    printf("== Total time spent waiting for shared mem is: %d (s)   ==\n",Cronometers.time_spent_waiting_shared_memory);
-    printf("==========================================================\n");
+    printf("===============================================================\n");
+    printf("=== Report of producer with id: %5d                        ===\n",pid);
+    printf("=== Number of messages produced: %5d                       ===\n",number_of_produced_messages);
+    printf("=== Total execution time is: %5d (s)                       ===\n",Cronometers.execution_time);
+    printf("=== Total time spent in delay is: %5d (s)                  ===\n",Cronometers.time_spent_in_exp_dist_delay);
+    printf("=== Total time spent waiting for shared mem is: %5d (s)    ===\n",Cronometers.time_spent_waiting_shared_memory);
+    printf("===============================================================\n");
 
     //detach from shared memory
     shmdt(sm_ptr);
