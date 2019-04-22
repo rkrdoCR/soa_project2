@@ -166,6 +166,7 @@ La siguiente es la metodología seguida por el grupo de trabajo para la solució
  1. Se tiene un directorio principal llamado "soa_project2" el cual a su vez contiene varios directorios y algunos archivos de codigo importante tales como Makefile, Readme.md, y los archivos _main_ de los cuatro procesos.
 ```
 |--- Makefile
+|--- set_environment_variables
 |---consumer
 |    |--consumer_main.c
 |---creator
@@ -183,9 +184,18 @@ La siguiente es la metodología seguida por el grupo de trabajo para la solució
 |    |--finalizer_main.c
 |---producer
 |    |--producer_main.c
+|---tmux
+|    |--.tmux.conf
+|    |--tmux_multi.sh
+|    |--tmux_script_poc
 |---utilities
+|    |--check_mod.c
+|    |--check_mod.h
 |    |--exp_dist.c
 |    |--exp_dist.h
+|    |--get_key.c
+|    |--get_key.h
+|    |--test_exp_dist.c
 |    |--time_util.c
 |    |--time_util.h
 ```
