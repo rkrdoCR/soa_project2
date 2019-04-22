@@ -224,18 +224,3 @@ La siguiente es la metodología seguida por el grupo de trabajo para la solució
 
  
 
-Información sobre cambios y limitaciones del programa:
-======================================================
-TODO
-
-Notas y problemas encontrados:
-==============================
-Durante el desarrollo de este ejercicio, se presentaron varios problemas los cuales resumimos a continuacion:
-
-
-	1. 
-	
-	
-
-
-
